@@ -7,6 +7,7 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelSkeletonHead;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -74,6 +75,13 @@ public class RenderHandler {
             event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
 
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void fovUpdateEvent(FOVUpdateEvent event) {
+        if (EntityCamera.isActive()) {
+            event.newfov = 1F;
         }
     }
 }
