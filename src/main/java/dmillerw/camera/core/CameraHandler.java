@@ -1,5 +1,6 @@
 package dmillerw.camera.core;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 
@@ -12,10 +13,12 @@ public class CameraHandler {
         public final Vec3 position;
         public final float pitch;
         public final float yaw;
+        public final int dimension;
         public CameraData(Vec3 position, float pitch, float yaw) {
             this.position = position;
             this.pitch = pitch;
             this.yaw = yaw;
+            this.dimension = Minecraft.getMinecraft().theWorld.provider.dimensionId;
         }
     }
 

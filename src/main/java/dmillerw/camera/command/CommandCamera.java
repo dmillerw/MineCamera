@@ -2,6 +2,7 @@ package dmillerw.camera.command;
 
 import dmillerw.camera.core.CameraHandler;
 import dmillerw.camera.entity.EntityCamera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -75,7 +76,11 @@ public class CommandCamera extends CommandBase {
                         return;
                     } else {
                         try {
-                            CameraHandler.removeCamera(Integer.parseInt(args[1]));
+                            int id = Integer.parseInt(args[1]);
+                            CameraHandler.removeCamera(id);
+                            if (id == EntityCamera.activeCameraId) {
+                                EntityCamera.destroyCamera();
+                            }
                             return;
                         } catch (NumberFormatException ex) {
                             throw new WrongUsageException("/camera remove <id>");
@@ -87,6 +92,11 @@ public class CommandCamera extends CommandBase {
                     try {
                         CameraHandler.CameraData cameraData = CameraHandler.getCamera(Integer.parseInt(args[1]));
                         if (cameraData != null) {
+                            if (cameraData.dimension != Minecraft.getMinecraft().theWorld.provider.dimensionId) {
+                                sender.addChatMessage(new ChatComponentText("Cannot access cameras in different dimensions!"));
+                                return;
+                            }
+
                             EntityCamera.createCamera();
                             EntityCamera.activeCameraId = Integer.parseInt(args[1]);
                             EntityCamera.moveCamera(cameraData.position.xCoord, cameraData.position.yCoord, cameraData.position.zCoord, cameraData.pitch, cameraData.yaw);
