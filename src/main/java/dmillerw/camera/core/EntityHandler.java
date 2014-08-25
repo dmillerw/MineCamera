@@ -1,8 +1,8 @@
 package dmillerw.camera.core;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import dmillerw.camera.entity.EntityCamera;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.EntityInteractEvent;
 
 /**
  * @author dmillerw
@@ -10,8 +10,15 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 public class EntityHandler {
 
     @SubscribeEvent
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        if (EntityCamera.isActive()) {
+    public void onEntityInteract(EntityInteractEvent event) {
+        if (event.entityLiving == event.entityPlayer) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerAttack(AttackEntityEvent event) {
+        if (event.entityLiving == event.entityPlayer) {
             event.setCanceled(true);
         }
     }

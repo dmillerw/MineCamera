@@ -1,15 +1,18 @@
 package dmillerw.camera;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import dmillerw.camera.command.CommandCamera;
+import dmillerw.camera.core.EntityHandler;
+import dmillerw.camera.core.KeyHandler;
 import dmillerw.camera.core.RenderHandler;
 import dmillerw.camera.entity.EntityCamera;
+import dmillerw.camera.helper.EventBusHelper;
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author dmillerw
@@ -27,8 +30,14 @@ public class MineCamera {
             return;
         }
 
-        MinecraftForge.EVENT_BUS.register(new RenderHandler());
+        ClientRegistry.registerKeyBinding(KeyHandler.KEY_EXIT);
+
+        EventBusHelper.register(new RenderHandler(), EventBusHelper.Type.BOTH);
+        EventBusHelper.register(new KeyHandler(), EventBusHelper.Type.FML);
+        EventBusHelper.register(new EntityHandler(), EventBusHelper.Type.FORGE);
+
         ClientCommandHandler.instance.registerCommand(new CommandCamera());
+
         EntityRegistry.registerModEntity(EntityCamera.class, "EntityCamera", 0, MineCamera.instance, 30, 8, false);
     }
 }
